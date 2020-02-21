@@ -1,0 +1,46 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}Forecasts{% endblock title %}
+
+{% block content %}
+<h1>Forecasts</h1>
+    {% if forecasts %}
+    <table class="table mt-2">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">City</th>
+            <th scope="col">Date</th>
+            <th scope="col">Min. Temp</th>
+            <th scope="col">Max. Temp</th>
+            <th scope="col">Rainfall (mm)</th>
+            <th scope="col">Wind (km/h)</th>
+            {% if request.user.is_admin %}
+                <th scope="col"></th>
+            {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+      {% for forecast in forecasts %}
+        <tr>
+          <td>{{ forecast.city }}</td>
+            <td>{{ forecast.forecast_date }}</td>
+            <td>{{ forecast.min_temp }}</td>
+            <td>{{ forecast.max_temp }}</td>
+            <td>{{ forecast.rainfall_mm }}</td>
+            <td>{{ forecast.wind_km }}</td>
+            {% if request.user.is_admin %}
+            <td><a href="{% url 'weather:forecast-update' forecast.pk %}">Edit</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+        {% include 'partials/_pagination.html' %}
+        {% else %}
+    <p>No forecasts yet!</p>
+
+    {% endif  %}
+
+{% endblock content %}
+
